@@ -37,6 +37,28 @@ void push_back(int value) {
     }
 }
 
+void delete_back() {
+    if (tail == NULL) return;
+    struct tnode *temp = tail;
+    tail = tail->prev;
+    if (tail) tail->next = NULL;
+    else head = NULL;
+    free(temp);
+}
+
+void delete_middle(int value) {
+    struct tnode *temp = head;
+    while (temp != NULL && temp->x != value) {
+        temp = temp->next;
+    }
+    if (temp == NULL) return;
+    if (temp->prev) temp->prev->next = temp->next;
+    if (temp->next) temp->next->prev = temp->prev;
+    if (temp == head) head = temp->next;
+    if (temp == tail) tail = temp->prev;
+    free(temp);
+}
+
 void display_forward() {
     struct tnode *temp = head;
     while (temp != NULL) {
@@ -74,6 +96,14 @@ int main() {
     
     printf("Backward: ");
     display_backward();
+    
+    delete_back();
+    printf("After deleting from back:\n");
+    display_forward();
+    
+    delete_middle(20);
+    printf("After deleting 20 from middle:\n");
+    display_forward();
     
     struct tnode* temp = tail;
     if (previous(temp) != NULL) {
